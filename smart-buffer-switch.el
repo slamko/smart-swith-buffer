@@ -1,16 +1,36 @@
-
+(defun current-buffer-name ()
+  (buffer-name (current-buffer)))
 ;; Smart buffer switch
 
 ;;
 
-(defun current-buffer-name ()
-  (buffer-name (current-buffer)))
 
 (defun setq-ifnil (variable value)
   (setq variable (or variable value)))
 
 (defun sys-buffer-p ()
   (string= "*" (substring (current-buffer-name) 0 1)))
+
+
+
+;; switch to sys buffer
+
+(defun do-switch-system-buffer (switch-fun &optional first-buffer)
+  (if (not (string= first-buffer (current-buffer-name)))
+	  (progn
+		(setq first-buffer (or first-buffer (current-buffer-name)))
+		(funcall switch-fun)
+		(if (not (sys-buffer-p))
+			(do-switch-system-buffer switch-fun first-buffer)))))
+
+(defun switch-to-next-sys-buffer ()
+  (interactive)
+  (do-switch-system-buffer 'switch-to-next-buffer))
+
+(defun switch-to-prev-sys-buffer ()
+  (interactive)
+  (do-switch-system-buffer 'switch-to-prev-buffer))
+
 
 ;; switch to user buffer
 
