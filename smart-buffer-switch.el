@@ -8,9 +8,29 @@
 (defun setq-ifnil (variable value)
   (setq variable (or variable value)))
 
+
 (defun sys-buffer-p ()
   (string= "*" (substring (current-buffer-name) 0 1)))
 
+
+;; switch to project buffer
+
+(defun do-switch-project-buffer (switch-fun &optional first-buffer project-dir)
+  (if (not (string= first-buffer (current-buffer-name)))
+	  (progn
+ 		(setq first-buffer (or first-buffer (current-buffer-name)))
+		(setq project-dir (or project-dir (file-name-directory buffer-file-name)))
+		(funcall switch-fun)
+		(if (or (not buffer-file-name) (not (string-prefix-p project-dir buffer-file-name)))
+			(do-switch-project-buffer switch-fun first-buffer project-dir)))))
+
+(defun switch-to-next-project-buffer ()
+  (interactive)
+  (do-switch-project-buffer 'switch-to-next-buffer))
+
+(defun switch-to-prev-project-buffer ()
+  (interactive)
+  (do-switch-project-buffer 'switch-to-prev-buffer))
 
 
 ;; switch to sys buffer
