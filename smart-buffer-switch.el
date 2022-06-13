@@ -1,25 +1,29 @@
-(defun current-buffer-name ()
-  (buffer-name (current-buffer)))
+
 ;; Smart buffer switch
 
 ;;
 
+(defun current-buffer-name ()
+  (buffer-name (current-buffer)))
 
-(defun setq-ifnil (variable value)
+
+(defmacro setq-ifnil (variable value)
   (setq variable (or variable value)))
-
 
 (defun sys-buffer-p ()
   (string= "*" (substring (current-buffer-name) 0 1)))
 
+(defun switch-to-last-buffer ()
+  (interactive)
+  (switch-to-buffer nil))
 
 ;; switch to project buffer
 
 (defun do-switch-project-buffer (switch-fun &optional first-buffer project-dir)
   (if (not (string= first-buffer (current-buffer-name)))
 	  (progn
- 		(setq first-buffer (or first-buffer (current-buffer-name)))
-		(setq project-dir (or project-dir (file-name-directory buffer-file-name)))
+ 		(setq-ifnil first-buffer (current-buffer-name))
+		(setq-ifnil project-dir (file-name-directory buffer-file-name))
 		(funcall switch-fun)
 		(if (or (not buffer-file-name) (not (string-prefix-p project-dir buffer-file-name)))
 			(do-switch-project-buffer switch-fun first-buffer project-dir)))))
@@ -38,7 +42,7 @@
 (defun do-switch-system-buffer (switch-fun &optional first-buffer)
   (if (not (string= first-buffer (current-buffer-name)))
 	  (progn
-		(setq first-buffer (or first-buffer (current-buffer-name)))
+		(setq-ifnil first-buffer (current-buffer-name))
 		(funcall switch-fun)
 		(if (not (sys-buffer-p))
 			(do-switch-system-buffer switch-fun first-buffer)))))
@@ -57,7 +61,7 @@
 (defun do-switch-user-buffer (switch-fun &optional first-buffer)
   (if (not (string= first-buffer (current-buffer-name)))
 	  (progn
-		(setq first-buffer (or first-buffer (current-buffer-name)))
+		(setq-ifnil first-buffer (current-buffer-name))
 		(funcall switch-fun)
 		(if (sys-buffer-p)
 			(do-switch-user-buffer switch-fun first-buffer)))))
@@ -75,7 +79,7 @@
 (defun do-switch-directory-buffer (switch-fun &optional first-buffer)
    (if (not (string= first-buffer (current-buffer-name)))
    	(progn
-   	  (setq first-buffer (or first-buffer (current-buffer-name)))
+   	  (setq-ifnil first-buffer (current-buffer-name))
    	  (funcall switch-fun)
    	  (if (or (sys-buffer-p) buffer-file-name)
    		  (do-switch-directory-buffer switch-fun first-buffer)))))
