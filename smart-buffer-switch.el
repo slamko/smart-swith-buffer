@@ -1,3 +1,5 @@
+;; smart-buffer-switch.el -- a set of emacs lisp functions intended to simplify switching between emacs buffers.
+
 ;; Copyright (C) 2022 Viacheslav Chepelyk-Kozhin.
 ;;
 ;; This program is free software: you can redistribute it and/or modify it under
@@ -8,7 +10,6 @@
 ;; See the GNU General Public License for more details.
 ;;
 ;; You should have received a copy of the GNU General Public License along with this program. If not, see <https://www.gnu.org/licenses/>.
-
 
 
 ;; helper functions 
@@ -22,7 +23,9 @@
 (defun sys-buffer-p ()
   (string= "*" (substring (current-buffer-name) 0 1)))
 
-(defun switch-to-last-buffer ()
+
+
+(defun smart-buf--switch-to-last-buffer ()
   (interactive)
   (switch-to-buffer nil))
 
@@ -37,12 +40,12 @@
 		(if (or (not buffer-file-name) (not (string-prefix-p project-dir buffer-file-name)))
 			(do-switch-project-buffer switch-fun first-buffer project-dir)))))
 
-(defun switch-to-next-project-buffer ()
+(defun smart-buf--switch-to-next-project-buffer ()
   "Switch to next buffer associated with a file opened within the directory tree of the current visited file. "
   (interactive)
   (do-switch-project-buffer 'switch-to-next-buffer))
 
-(defun switch-to-prev-project-buffer ()
+(defun smart-buf--switch-to-prev-project-buffer ()
   "Switch to previous buffer associated with a file opened within the directory tree of the current visited file. "
   (interactive)
   (do-switch-project-buffer 'switch-to-prev-buffer))
@@ -58,12 +61,12 @@
 		(if (not (sys-buffer-p))
 			(do-switch-system-buffer switch-fun first-buffer)))))
 
-(defun switch-to-next-sys-buffer ()
+(defun smart-buf--switch-to-next-sys-buffer ()
   "Switch to next buffer not associated with a file."
   (interactive)
   (do-switch-system-buffer 'switch-to-next-buffer))
 
-(defun switch-to-prev-sys-buffer ()
+(defun smart-buf--switch-to-prev-sys-buffer ()
   "Switch to previous buffer not associated with a file."
   (interactive)
   (do-switch-system-buffer 'switch-to-prev-buffer))
@@ -79,12 +82,12 @@
 		(if (sys-buffer-p)
 			(do-switch-user-buffer switch-fun first-buffer)))))
 
-(defun switch-to-next-user-buffer ()
+(defun smart-buf--switch-to-next-user-buffer ()
   "Switch to next buffer created by the user."
   (interactive)
   (do-switch-user-buffer 'switch-to-next-buffer))
 
-(defun switch-to-prev-user-buffer ()
+(defun smart-buf--switch-to-prev-user-buffer ()
   "Switch to previous buffer created by the user."
   (interactive)
   (do-switch-user-buffer 'switch-to-prev-buffer))
@@ -99,12 +102,12 @@
    	  (if (or (sys-buffer-p) buffer-file-name)
    		  (do-switch-directory-buffer switch-fun first-buffer)))))
 
-(defun switch-to-next-dir-buffer ()
+(defun smart-buf--switch-to-next-dir-buffer ()
   "Switch to next buffer with file manager opened."
   (interactive)
   (do-switch-directory-buffer 'switch-to-next-buffer))
 
-(defun switch-to-prev-dir-buffer ()
+(defun smart-buf--switch-to-prev-dir-buffer ()
   "Switch to previous buffer with file manager opened."
   (interactive)
   (do-switch-directory-buffer 'switch-to-prev-buffer))
@@ -120,12 +123,12 @@
 		(if (not buffer-file-name)
 			(do-switch-buffer-file switch-fun first-buffer)))))
 
-(defun switch-to-next-file-buffer ()
+(defun smart-buf--switch-to-next-file-buffer ()
   "Switch to next buffer associated with some file."
   (interactive)
   (do-switch-buffer-file 'switch-to-next-buffer))
 
-(defun switch-to-prev-file-buffer ()
+(defun smart-buf--switch-to-prev-file-buffer ()
   "Switch to previous buffer associated with some file."
   (interactive)
   (do-switch-buffer-file 'switch-to-prev-buffer))
