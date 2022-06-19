@@ -19,3 +19,5 @@ This package was created to provide some helper functions that may simplify swit
 - ```switch-to-next/prev-project-buffer``` - Switch to the buffer associated with a file that lives within the current working directory tree.
 - ```switch-to-next/prev-dir-buffer``` - Switch to the buffer with Dired opened.
 - ```switch-to-last-buffer``` - Switch to your previous active buffer.
+
+#### Also you may want to consider using ```keybindings.el``` as a template for ke bindings configuration for this package.

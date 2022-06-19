@@ -23,11 +23,15 @@
 (defun sys-buffer-p ()
   (string= "*" (substring (current-buffer-name) 0 1)))
 
-
+;; base functions
 
 (defun smart-buf--switch-to-last-buffer ()
   (interactive)
   (switch-to-buffer nil))
+
+(defun smart-buf--switch-to-scratch-buffer ()
+  (interactive)
+  (switch-to-buffer "*scratch*"))
 
 ;; switch to project buffer
 
